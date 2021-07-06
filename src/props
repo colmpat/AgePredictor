@@ -1,2 +1,2 @@
-ListType=ArrayList
-Directory=/Users/dbrizan/namesbystate
+ListType=LinkedList
+Directory=C:/Users/Colml/Documents/CS245/namesbystate
