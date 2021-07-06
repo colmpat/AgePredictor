@@ -108,38 +108,39 @@ public class AgePredictor {
     }
 
     private void linkedListPrediction(Name name, int[] birthYearRange) {
-        Node<Name> curr = ll.head;
+        Node<Name> node = ll.head;
 
-        while(curr != null) {
+        while(node != null) {
+            Name curr = node.data;
             //if the given fields don't match the current name, iterate
-            if(curr.data.sex != name.sex || !curr.data.state.equals(name.state) || !curr.data.name.equals(name.name)) {
-                curr = curr.next;
+            if(curr.sex != name.sex || !curr.state.equals(name.state) || !curr.name.equals(name.name)) {
+                node = node.next;
                 continue;
             }
             
             //check for a new highest count
-            else if(curr.data.count > name.count) {
-                name.count = curr.data.count;
-                name.birthYear = curr.data.birthYear; //store the most likely birthYear and its corresponding count then iterate
-                curr = curr.next;
+            else if(curr.count > name.count) {
+                name.count = curr.count;
+                name.birthYear = curr.birthYear; //store the most likely birthYear and its corresponding count then iterate
+                node = node.next;
                 birthYearRange = new int[] {0,0}; //reset range because there is now only one prediciton
                 continue;
             }
 
             //check for duplicate count, which would mean there are multiple age predictions of equal probability
-            else if(curr.data.count == name.count) {
+            else if(curr.count == name.count) {
                 //if greater than first (new youngest range) 2010 > 1995 therefore 2010 is new youngest range
-                if(curr.data.birthYear > birthYearRange[0])
-                    birthYearRange[0] = curr.data.birthYear;
+                if(curr.birthYear > birthYearRange[0])
+                    birthYearRange[0] = curr.birthYear;
                 //else if less than second (new oldest range) 1960 < 1985 therefore 1960 is new oldest range
-                else if(curr.data.birthYear < birthYearRange[1])
-                    birthYearRange[1] = curr.data.birthYear;
-                curr = curr.next; 
+                else if(curr.birthYear < birthYearRange[1])
+                    birthYearRange[1] = curr.birthYear;
+                node = node.next; 
             }
 
             //if all the fields match but there is not a new max for count we iterate
             else
-                curr = curr.next;
+                node = node.next;
         }
 
     }
@@ -227,9 +228,10 @@ public class AgePredictor {
             System.out.print("Name of the person (or EXIT to quit): ");
             name = sc.next(); //we use next becuase we just want the first word
             sc.nextLine(); //to catch the '\n' the user enters
-            if(name.equals("EXIT")) //our only exit case from the loop
+            if(name.equals("EXIT")) { //our only exit case from the loop
+                sc.close();
                 return;
-            
+            }
             //get sex
             String sex = "";
             do {
@@ -273,6 +275,5 @@ public class AgePredictor {
                 System.out.println("Error: " + e.getLocalizedMessage());
             }
         } while(true);
-        
     }
 }
